@@ -1,3 +1,6 @@
-<!doctype html>
-<title>Hello from Flask</title>
-<h1>Currently, there is {{ confirmed }} confirmed, {{ deaths }} deaths and {{ recovered }} recovered.</h1>
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <h1>Currently,<br>there is {{ confirmed }} confirmed, {{ deaths }} deaths and {{ recovered }} recovered.</h1>
+{% endblock %}

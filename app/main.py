@@ -11,6 +11,7 @@ import json
 tl = Timeloop()
 
 app = Flask(__name__)
+Bootstrap(app)
 
 global dataStored
 
@@ -27,7 +28,7 @@ def index():
     _confirmed = d['Confirmed']
     _recovered = d['Recovered']
 
-    return render_template('index.html', deaths=_deaths, confirmed=_confirmed, recovered=_recovered)
+    return render_template('index.html', title='Coronavirus live feed', deaths=_deaths, confirmed=_confirmed, recovered=_recovered)
 
 
 @app.route('/api/latest')
@@ -40,6 +41,16 @@ def api_latest():
 def api_by_country():
     d = dataStored.get_latest_value()
     return json.dumps(d)
+
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('500.html'), 500
 
 
 if __name__ == '__main__':
