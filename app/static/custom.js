@@ -9,15 +9,23 @@
 	}
 
     window.addEventListener('load', function() {
-        $.ajax({
-            url : '/api/latest',
-            type : 'GET',
-            dataType : 'json',
-            success : function(response) {
-                data = response['data'];
-                update_numbers(data['confirmed'], data['deaths'], data['recovered'],);
-                update_timestamp(response['timestamp']);
+        update_data();
+
+        function update_data() {
+            $.ajax({
+                url : '/api/latest',
+                type : 'GET',
+                dataType : 'json',
+                success : function(response) {
+                    data = response['data'];
+                    update_numbers(data['confirmed'], data['deaths'], data['recovered'],);
+                    update_timestamp(response['timestamp']);
+                    },
+                complete: function() {
+                    setInterval(update_data, 5000);
                 }
             });
+
+        }
     }, false);
 })(jQuery);
