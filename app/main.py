@@ -23,14 +23,7 @@ def fetch_data():
 
 @app.route('/')
 def index():
-    d = dataStored.get_latest_value()
-    _deaths = d['data']['Deaths']
-    _confirmed = d['data']['Confirmed']
-    _recovered = d['data']['Recovered']
-    _timestamp = d['timestamp']
-
-    return render_template('index.html', title='Coronavirus live feed', deaths=_deaths, confirmed=_confirmed,
-                           recovered=_recovered, timestamp=_timestamp)
+    return render_template('index.html', title='Coronavirus live feed')
 
 
 @app.route('/api/latest')

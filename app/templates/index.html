@@ -2,6 +2,7 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <h1>Currently,<br>there is {{ confirmed }} confirmed, {{ deaths }} deaths and {{ recovered }} recovered.</h1>
-    <br>Last data on {{ timestamp }}.
+    <h1 class="data-virus">Currently,<br>there is ... confirmed, ... deaths and ... recovered.</h1>
+    <br>
+    <p class="timestamp-virus">Last data on ... .</p>
 {% endblock %}

@@ -88,7 +88,7 @@ class DataModel:
         deaths = sum([int(i) for i in self._data['deaths']['Deaths']])
         confirmed = sum([int(i) for i in self._data['confirmed']['Confirmed']])
         recovered = sum([int(i) for i in self._data['recovered']['Recovered']])
-        latest_data = {'Deaths': deaths, 'Confirmed': confirmed, 'Recovered': recovered}
+        latest_data = {'deaths': deaths, 'confirmed': confirmed, 'recovered': recovered}
 
         time = self._data['timestamp']
 
