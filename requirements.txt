@@ -2,3 +2,4 @@ timeloop
 pandas
 requests
 flask
+pygal
