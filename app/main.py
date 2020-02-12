@@ -7,6 +7,7 @@ from data import DataModel
 from timeloop import Timeloop
 from datetime import timedelta
 import json
+import pygal
 
 tl = Timeloop()
 
@@ -24,6 +25,31 @@ def fetch_data():
 @app.route('/')
 def index():
     return render_template('index.html', title='Coronavirus live feed')
+
+
+@app.route('/overview')
+def overview():
+    statics = {'SARS':{'deaths'   :774,
+                       'confirmed':8_098,
+                       'recovered':7_324},
+               'MERS':{'deaths'   :862,
+                       'confirmed':2_506,
+                       'recovered':1_644}}
+
+    ncov = dataStored.get_latest_value()
+
+    bar_plots = {}
+    for category in statics['SARS'].keys():
+        bar_plot = pygal.Bar()
+        bar_plot.title = f'Total number of {category} as of {ncov["timestamp"]}'
+        bar_plot.add('2019-nCov', ncov['data'][category])
+
+        for static in statics.keys():
+            bar_plot.add(static, statics[static][category])
+
+        bar_plots[category+'_BAR'] = bar_plot.render_data_uri()
+
+    return render_template('overview.html', title='Overview', **bar_plots)
 
 
 @app.route('/api/latest')
