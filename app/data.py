@@ -5,28 +5,6 @@ import csv
 import pandas as pd
 
 
-def extract_data(data, category):
-    # Extract data
-    data = list(csv.DictReader(data.splitlines()))
-    df = pd.DataFrame(data)
-
-    # Data Cleaning
-    df = df.iloc[:, [1, -1]]  # Select only Country and its last values
-    df.columns = ['Country/Region', category]
-    pd.to_numeric(df[category])
-    df['Country/Region'].replace({'Mainland China': 'China'}, inplace=True)
-    df.dropna(axis=0, how='any', thresh=None, subset=None, inplace=False)
-
-    # Compress data by country
-
-    # Store data
-
-    # NA, China, US, ... (country)
-    # date, 0, 0, ..
-
-    return ''
-
-
 def get_data_from_local():
     # Download the dataset
     BASE_FILES = './time_series/time_series_2019-ncov-{}.csv'
@@ -83,7 +61,7 @@ def get_data_from_http():
     return DATAFRAMES
 
 
-def get_data(use_local=True):
+def get_data(use_local=False):
     if use_local:
         return get_data_from_local()
     else:
