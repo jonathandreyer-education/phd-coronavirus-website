@@ -1,0 +1,12 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Datas
+app/time_series/*
+
+# IDE JetBrains
+.idea/
+
+# System files
+.DS_Store
