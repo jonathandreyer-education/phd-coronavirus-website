@@ -30,6 +30,8 @@ def get_data_from_local():
 
             DATAFRAMES[_category.lower()] = df
 
+            DATAFRAMES['timestamp'] = _text.splitlines()[0].split(',')[-1]
+
     return DATAFRAMES
 
 
@@ -58,6 +60,8 @@ def get_data_from_http():
 
         DATAFRAMES[category.lower()] = df
 
+        DATAFRAMES['timestamp'] = text.splitlines()[0].split(',')[-1]
+
     return DATAFRAMES
 
 
@@ -75,7 +79,7 @@ class DataModel:
 
     def pull_data(self):
         try:
-            self._data = get_data(use_local=True)
+            self._data = get_data(use_local=False)
             print('Data fetched')
         except:
             print('Error to get data')
@@ -86,7 +90,7 @@ class DataModel:
         recovered = sum([int(i) for i in self._data['recovered']['Recovered']])
         latest_data = {'Deaths': deaths, 'Confirmed': confirmed, 'Recovered': recovered}
 
-        time = self._data['confirmed']
+        time = self._data['timestamp']
 
         return {'timestamp': time, 'data': latest_data}
 
