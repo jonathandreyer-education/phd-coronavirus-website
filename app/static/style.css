@@ -16,12 +16,11 @@ path {
 	shape-rendering: crispEdges;
 }
 
-chartArea {
-	height: 16rem;
-	position: relative;
+#chartArea {
+	height: 25em;
 }
 
-chartArea > svg {
+#chartArea > svg {
 	width: 100%;
 	height: 100%;
 }
