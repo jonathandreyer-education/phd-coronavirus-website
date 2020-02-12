@@ -32,6 +32,18 @@ def api_latest():
     return json.dumps(d)
 
 
+@app.route('/api/timeseries')
+def api_timeseries():
+    t = [
+        {"timestamp": "12-02-2020 10:20", "data": {"deaths": 1117, "confirmed": 45210, "recovered": 5133}},
+        {"timestamp": "11-02-2020 10:00", "data": {"deaths": 1000, "confirmed": 44300, "recovered": 4700}},
+        {"timestamp": "10-02-2020 10:00", "data": {"deaths": 800, "confirmed": 40000, "recovered": 4000}},
+        {"timestamp": "09-02-2020 10:00", "data": {"deaths": 600, "confirmed": 30000, "recovered": 2500}},
+        {"timestamp": "08-02-2020 10:00", "data": {"deaths": 300, "confirmed": 10000, "recovered": 1000}}
+    ]
+    return json.dumps(t)
+
+
 @app.route('/api/by_country')
 def api_by_country():
     d = dataStored.get_latest_value()

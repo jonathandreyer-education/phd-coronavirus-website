@@ -41,7 +41,7 @@
         height = $("#chartArea").height() - margin.top - margin.bottom;
 
     // Parse the date / time
-    var	parseDate = d3.time.format("%d-%b-%y").parse;
+    var	parseDate = d3.time.format("%d-%m-%Y %H:%M").parse;
 
     // Set the ranges
     var	x = d3.time.scale().range([0, width]);
@@ -57,7 +57,7 @@
     // Define the line
     var	valuelineDeath = d3.svg.line()
         .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.death); });
+        .y(function(d) { return y(d.deaths); });
     var	valuelineConfirmed = d3.svg.line()
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.confirmed); });
@@ -74,22 +74,25 @@
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     // Get the data
-    d3.csv("static/data.csv", function(error, data) {
-        data.forEach(function(d) {
-            //date,death,confirmed,recovered
-            d.date = parseDate(d.date);
-            d.death = +d.death;
-            d.confirmed = +d.confirmed;
-            d.recovered = +d.recovered;
+    d3.json("api/timeseries", function(error, datajson) {
+        data = [];
+        console.log(data);
+        datajson.forEach(function(d) {
+            var _d = {};
+            _d.date = parseDate(d.timestamp);
+            _d.deaths = +d.data.deaths;
+            _d.confirmed = +d.data.confirmed;
+            _d.recovered = +d.data.recovered;
+            data.push(_d);
         });
 
-        var extents = ["death", "confirmed"].map(function(dimensionName) {
+        var extents = ["deaths", "confirmed", "recovered"].map(function(dimensionName) {
             return d3.extent(data, function(d) { return d[dimensionName] });
         });
 
         // Scale the range of the data
         x.domain(d3.extent(data, function(d) { return d.date; }));
-        y.domain([ 0, d3.max(data, function(d) { return Math.max.apply(Math, [d.death, d.confirmed, d.recovered]); })]);
+        y.domain([ 0, d3.max(data, function(d) { return Math.max.apply(Math, [d.deaths, d.confirmed, d.recovered]); })]);
 
         // Add the valueline path.
         chart.append("path")
