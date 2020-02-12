@@ -1,0 +1,27 @@
+ /* set the CSS */
+
+body { font: 12px Arial;}
+
+path {
+  stroke: steelblue;
+	stroke-width: 2;
+	fill: none;
+}
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: grey;
+	stroke-width: 1;
+	shape-rendering: crispEdges;
+}
+
+chartArea {
+	height: 16rem;
+	position: relative;
+}
+
+chartArea > svg {
+	width: 100%;
+	height: 100%;
+}
