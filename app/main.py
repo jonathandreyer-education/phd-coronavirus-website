@@ -32,13 +32,7 @@ def index():
 
 @app.route('/overview')
 def overview():
-    statics = {'SARS':{'deaths'   :774,
-                       'confirmed':8_098,
-                       'recovered':7_324},
-               'MERS':{'deaths'   :862,
-                       'confirmed':2_506,
-                       'recovered':1_644}}
-
+    statics = dataStored.get_static()
     ncov = dataStored.get_latest_value()
 
     bar_plots = {}

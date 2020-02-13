@@ -109,6 +109,8 @@ def get_data(use_local=False):
 class DataModel:
     def __init__(self):
         self._data = None
+        self._statical_data = {'SARS':{'deaths': 774, 'confirmed': 8_098, 'recovered': 7_324},
+                               'MERS':{'deaths': 862, 'confirmed':2_506, 'recovered':1_644}}
         self.pull_data()
 
     def pull_data(self):
@@ -148,3 +150,6 @@ class DataModel:
             _data[_category.lower()] = _d
 
         return _data
+
+    def get_static(self):
+        return self._statical_data
