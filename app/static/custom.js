@@ -103,18 +103,22 @@
             })
         });
 
+        // Scale the range of the data
         x.domain(d3.extent(dates));
         y.domain([ 0, d3.max(values)]);
 
         // Add the valueline path.
         chart.append("path")
             .attr("class", "line")
+            .style("stroke", "green")
             .attr("d", valuelineDeath(data.deaths));
         chart.append("path")
             .attr("class", "line")
+            .style("stroke", "blue")
             .attr("d", valuelineConfirmed(data.confirmed));
         chart.append("path")
             .attr("class", "line")
+            .style("stroke", "red")
             .attr("d", valuelineRecovered(data.recovered));
 
         // Add the X Axis
