@@ -5,32 +5,66 @@ import csv
 import pandas as pd
 
 
+CATEGORIES = ['Confirmed', 'Deaths', 'Recovered']
+
+
+def process_data(data):
+    # Extract data
+    _data = list(csv.DictReader(data.splitlines()))
+    df = pd.DataFrame(_data)
+    df['Country/Region'].replace({'Mainland China': 'China'}, inplace=True)
+
+    # Remove useless columns
+    df = df.drop(["Province/State", "Lat", "Long"], axis=1)
+
+    # Convert to numerical values
+    cols = [i for i in df.columns if i not in ["Country/Region"]]
+    for col in cols:
+        df[col] = pd.to_numeric(df[col])
+
+    # Regroup by sum all row of same country
+    df = df.groupby(['Country/Region']).agg('sum')
+
+    # Set index as date
+    df_T = df.T
+    df_T['Date'] = pd.to_datetime(df_T.index)
+    df_T.set_index('Date', inplace=True)
+
+    # Transpose data
+    df_cleaned = df_T.copy()
+
+    # Find latest date
+    ts = df_cleaned.index.max()
+
+    return ts, df_cleaned
+
+
 def get_data_from_local():
     # Download the dataset (Derivated from remote version)
     BASE_FILES = './time_series/time_series_2019-ncov-{}.csv'
-    CATEGORIES = ['Confirmed', 'Deaths', 'Recovered']
-    DATAFRAMES = {}
+    DATAFRAMES = {'timestamp': None}
 
     # Iterate through all files
     for _category in CATEGORIES:
         pathfile = BASE_FILES.format(_category)
         with open(pathfile) as file:
+            # Read data from file
             _text = file.read()
 
-            # Extract data
-            data = list(csv.DictReader(_text.splitlines()))
-            df = pd.DataFrame(data)
+            # Process data
+            ts, df = process_data(_text)
 
-            # Data Cleaning
-            df = df.iloc[:, [1, -1]]  # Select only Country and its last values
-            df.columns = ['Country/Region', _category]
-            pd.to_numeric(df[_category])
-            df['Country/Region'].replace({'Mainland China': 'China'}, inplace=True)
-            df.dropna(axis=0, how='any', thresh=None, subset=None, inplace=False)
-
+            # Store data processed
             DATAFRAMES[_category.lower()] = df
+            DATAFRAMES['timestamp'] = ts
 
-            DATAFRAMES['timestamp'] = _text.splitlines()[0].split(',')[-1]
+            if DATAFRAMES['timestamp'] is None:
+                DATAFRAMES['timestamp'] = ts
+            else:
+                if DATAFRAMES['timestamp'] != ts:
+                    print('Warning, the latest value is not equal than other feed!')
+                else:
+                    DATAFRAMES['timestamp'] = ts
 
     return DATAFRAMES
 
@@ -38,29 +72,29 @@ def get_data_from_local():
 def get_data_from_http():
     # Download the dataset (Source: https://github.com/nat236919/Covid2019API/blob/master/app/helper.py)
     BASE_URL = 'https://raw.githubusercontent.com/CSSEGISandData/2019-nCoV/master/time_series/time_series_2019-ncov-{}.csv'
-    CATEGORIES = ['Confirmed', 'Deaths', 'Recovered']
-    DATAFRAMES = {}
+    DATAFRAMES = {'timestamp': None}
 
     # Iterate through all files
-    for category in CATEGORIES:
-        url = BASE_URL.format(category)
+    for _category in CATEGORIES:
+        # Read data from URL
+        url = BASE_URL.format(_category)
         res = requests.get(url)
-        text = res.text
+        _text = res.text
 
-        # Extract data
-        data = list(csv.DictReader(text.splitlines()))
-        df = pd.DataFrame(data)
+        # Process data
+        ts, df = process_data(_text)
 
-        # Data Cleaning
-        df = df.iloc[:, [1, -1]]  # Select only Country and its last values
-        df.columns = ['Country/Region', category]
-        pd.to_numeric(df[category])
-        df['Country/Region'].replace({'Mainland China': 'China'}, inplace=True)
-        df.dropna(axis=0, how='any', thresh=None, subset=None, inplace=False)
+        # Store data processed
+        DATAFRAMES[_category.lower()] = df
+        DATAFRAMES['timestamp'] = ts
 
-        DATAFRAMES[category.lower()] = df
-
-        DATAFRAMES['timestamp'] = text.splitlines()[0].split(',')[-1]
+        if DATAFRAMES['timestamp'] is None:
+            DATAFRAMES['timestamp'] = ts
+        else:
+            if DATAFRAMES['timestamp'] != ts:
+                print('Warning, the latest value is not equal than other feed!')
+            else:
+                DATAFRAMES['timestamp'] = ts
 
     return DATAFRAMES
 
@@ -85,14 +119,32 @@ class DataModel:
             print('Error to get data')
 
     def get_latest_value(self):
-        deaths = sum([int(i) for i in self._data['deaths']['Deaths']])
-        confirmed = sum([int(i) for i in self._data['confirmed']['Confirmed']])
-        recovered = sum([int(i) for i in self._data['recovered']['Recovered']])
-        latest_data = {'deaths': deaths, 'confirmed': confirmed, 'recovered': recovered}
+        _d = {}
 
-        time = self._data['timestamp']
+        for _category in CATEGORIES:
+            _df = self._data[_category.lower()]
+            _value = sum([int(v) for v in _df.loc[_df.index.max()]])
+            _d[_category.lower()] = _value
 
-        return {'timestamp': time, 'data': latest_data}
+        time = self._data['timestamp'].strftime("%d/%m/%Y %H:%M:%S")
 
-    def get_case_by_country(self):
-        pass
+        return {'timestamp': time, 'data': _d}
+
+    def get_timeseries(self):
+        _data = {}
+
+        # Sum for every timestamp
+        for _category in CATEGORIES:
+            _d = []
+            _df = self._data[_category.lower()]
+            _df = _df.sort_index()
+
+            for l in _df.iterrows():
+                _v = {}
+                _v['timestamp'] = l[0].strftime("%d/%m/%Y %H:%M:%S")
+                _v['value'] = sum([int(i) for i in l[1]])
+                _d.append(_v)
+
+            _data[_category.lower()] = _d
+
+        return _data

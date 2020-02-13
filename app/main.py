@@ -58,9 +58,9 @@ def api_latest():
     return json.dumps(d)
 
 
-@app.route('/api/by_country')
-def api_by_country():
-    d = dataStored.get_latest_value()
+@app.route('/api/timeseries')
+def api_timeseries():
+    d = dataStored.get_timeseries()
     return json.dumps(d)
 
 

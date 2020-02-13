@@ -2,7 +2,12 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <h1 class="data-virus">Currently,<br>there is ... confirmed, ... deaths and ... recovered.</h1>
-    <br>
-    <p class="timestamp-virus">Last data on ... .</p>
+    <div>
+        <h1 class="data-virus">Currently,<br>there is ... confirmed, ... deaths and ... recovered.</h1>
+        <br>
+        <p class="timestamp-virus">Last data on ... .</p>
+    </div>
+    <div>
+        <div class="col-xs-12 col-lg-6" id="chartArea">
+    </div>
 {% endblock %}
