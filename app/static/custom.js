@@ -1,7 +1,7 @@
 (function($){
 
     function update_numbers(confirmed, deaths, recovered) {
-        $('.data-virus').html('Currently,<br>there is ' + confirmed + ' confirmed, ' + deaths + ' deaths and ' + recovered + ' recovered.');
+        $('.data-virus').html('Today there are ' + confirmed + ' confirmed, ' + deaths + ' dead and ' + recovered + ' recovered individuals in relation to the current coronavirus (nCov-2019).');
 	}
 
 	function update_timestamp(ts) {
