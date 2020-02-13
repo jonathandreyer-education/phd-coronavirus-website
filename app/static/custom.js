@@ -41,7 +41,7 @@
         height = $("#chartArea").height() - margin.top - margin.bottom;
 
     // Parse the date / time
-    var	parseDate = d3.time.format("%d-%m-%Y %H:%M").parse;
+    var	parseDate = d3.time.format("%d/%m/%Y %H:%M:%S").parse;
 
     // Set the ranges
     var	x = d3.time.scale().range([0, width]);
@@ -57,13 +57,13 @@
     // Define the line
     var	valuelineDeath = d3.svg.line()
         .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.deaths); });
+        .y(function(d) { return y(d.value); });
     var	valuelineConfirmed = d3.svg.line()
         .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.confirmed); });
+        .y(function(d) { return y(d.value); });
     var	valuelineRecovered = d3.svg.line()
         .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.recovered); });
+        .y(function(d) { return y(d.value); });
 
     // Adds the svg canvas
     var	chart = d3.select("#chartArea")
@@ -75,35 +75,47 @@
 
     // Get the data
     d3.json("api/timeseries", function(error, datajson) {
-        data = [];
-        console.log(data);
-        datajson.forEach(function(d) {
-            var _d = {};
-            _d.date = parseDate(d.timestamp);
-            _d.deaths = +d.data.deaths;
-            _d.confirmed = +d.data.confirmed;
-            _d.recovered = +d.data.recovered;
-            data.push(_d);
-        });
+        var categories = ['deaths', 'confirmed', 'recovered'];
+        var data = {};
 
-        var extents = ["deaths", "confirmed", "recovered"].map(function(dimensionName) {
-            return d3.extent(data, function(d) { return d[dimensionName] });
+        categories.forEach(function (c) {
+            var _ = [];
+            datajson[c].forEach(function(d) {
+                var _d = {};
+                _d.date = parseDate(d.timestamp);
+                _d.value = +d.value;
+                _.push(_d);
+            });
+            data[c] = _;
         });
 
         // Scale the range of the data
-        x.domain(d3.extent(data, function(d) { return d.date; }));
-        y.domain([ 0, d3.max(data, function(d) { return Math.max.apply(Math, [d.deaths, d.confirmed, d.recovered]); })]);
+        var dates = [];
+        categories.forEach(function (c) {
+            data[c].forEach(function (d) {
+                dates.push(d.date);
+            })
+        });
+        var values = [];
+        categories.forEach(function (c) {
+            data[c].forEach(function (d) {
+                values.push(d.value);
+            })
+        });
+
+        x.domain(d3.extent(dates));
+        y.domain([ 0, d3.max(values)]);
 
         // Add the valueline path.
         chart.append("path")
             .attr("class", "line")
-            .attr("d", valuelineDeath(data));
+            .attr("d", valuelineDeath(data.deaths));
         chart.append("path")
             .attr("class", "line")
-            .attr("d", valuelineConfirmed(data));
+            .attr("d", valuelineConfirmed(data.confirmed));
         chart.append("path")
             .attr("class", "line")
-            .attr("d", valuelineRecovered(data));
+            .attr("d", valuelineRecovered(data.recovered));
 
         // Add the X Axis
         chart.append("g")

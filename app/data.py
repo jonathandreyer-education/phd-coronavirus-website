@@ -126,15 +126,25 @@ class DataModel:
             _value = sum([int(v) for v in _df.loc[_df.index.max()]])
             _d[_category.lower()] = _value
 
-        time = self._data['timestamp'].strftime("%m/%d/%Y, %H:%M:%S")
+        time = self._data['timestamp'].strftime("%d/%m/%Y %H:%M:%S")
 
         return {'timestamp': time, 'data': _d}
 
     def get_timeseries(self):
-        return [
-            {"timestamp": "12-02-2020 10:20", "data": {"deaths": 1117, "confirmed": 45210, "recovered": 5133}},
-            {"timestamp": "11-02-2020 10:00", "data": {"deaths": 1000, "confirmed": 44300, "recovered": 4700}},
-            {"timestamp": "10-02-2020 10:00", "data": {"deaths": 800, "confirmed": 40000, "recovered": 4000}},
-            {"timestamp": "09-02-2020 10:00", "data": {"deaths": 600, "confirmed": 30000, "recovered": 2500}},
-            {"timestamp": "08-02-2020 10:00", "data": {"deaths": 300, "confirmed": 10000, "recovered": 1000}}
-        ]
+        _data = {}
+
+        # Sum for every timestamp
+        for _category in CATEGORIES:
+            _d = []
+            _df = self._data[_category.lower()]
+            _df = _df.sort_index()
+
+            for l in _df.iterrows():
+                _v = {}
+                _v['timestamp'] = l[0].strftime("%d/%m/%Y %H:%M:%S")
+                _v['value'] = sum([int(i) for i in l[1]])
+                _d.append(_v)
+
+            _data[_category.lower()] = _d
+
+        return _data
