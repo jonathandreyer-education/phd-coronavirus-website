@@ -9,7 +9,6 @@
 	}
 
 	function draw_chart() {
-        console.log("draw chart!");
         // Set the dimensions of the canvas / graph
         var	margin = {top: 30, right: 20, bottom: 30, left: 50},
             width = $("#chartArea").width() - margin.left - margin.right,
@@ -137,7 +136,6 @@
 
     // chart
     window.addEventListener('resize', function(event){
-        console.log('TODO need to redraw chart!');
         draw_chart();
     });
 
