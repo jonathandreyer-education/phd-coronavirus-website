@@ -1,16 +1,18 @@
 (function($){
 
     function update_numbers(confirmed, deaths, recovered) {
-        $('.data-virus').html('Today there are ' + confirmed + ' confirmed, ' + deaths + ' dead and ' + recovered + ' recovered individuals in relation to the current coronavirus (nCov-2019).');
+        $('#number-confirmed').html(confirmed);
+        $('#number-recovered').html(recovered);
+        $('#number-deaths').html(deaths);
 	}
 
 	function update_timestamp(ts) {
-        $('.timestamp-virus').html('Last data on ' + ts + '.');
+        $('.timestamp-virus').html('Last data update (' + ts + ')');
 	}
 
 	function draw_chart() {
         // Set the dimensions of the canvas / graph
-        var	margin = {top: 30, right: 20, bottom: 30, left: 50},
+        var	margin = {top: 30, right: 20, bottom: 30, left: 60},
             width = $("#chartArea").width() - margin.left - margin.right,
             height = $("#chartArea").height() - margin.top - margin.bottom;
 
@@ -86,15 +88,15 @@
             // Add the valueline path.
             chart.append("path")
                 .attr("class", "line")
-                .style("stroke", "green")
+                .style("stroke", "rgb(113, 128, 150)")
                 .attr("d", valuelineDeath(data.deaths));
             chart.append("path")
                 .attr("class", "line")
-                .style("stroke", "blue")
+                .style("stroke", "rgb(229, 62, 62)")
                 .attr("d", valuelineConfirmed(data.confirmed));
             chart.append("path")
                 .attr("class", "line")
-                .style("stroke", "red")
+                .style("stroke", "rgb(56, 161, 105)")
                 .attr("d", valuelineRecovered(data.recovered));
 
             // Add the X Axis

@@ -2,13 +2,34 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <div>
-        <h1 class="data-virus">Today there are ... confirmed, ... dead, ... recovered individuals in relation to the current coronavirus (nCov-2019).</h1>
-        <br>
-        <p class="timestamp-virus">Last data on ... .</p>
+    <div class="row section-title">
+        <p>Real-time live data</p>
     </div>
-    <div>
-        <div class="col-xs-12 col-lg-6" id="chartArea">
+    <div class="row section-live-indicator">
+        <div class="col-sm-offset-2 col-sm-3 live-indicator">
+            <button class="btn btn-confirmed">
+                <p id="number-confirmed">0</p>
+                <p>Confirmed</p>
+            </button>
+        </div>
+        <div class="col-sm-2 live-indicator">
+            <button class="btn btn-recovered">
+                <p id="number-recovered">0</p>
+                <p>Recovered</p>
+            </button>
+        </div>
+        <div class="col-sm-3 live-indicator">
+            <button class="btn btn-deaths">
+                <p id="number-deaths">0</p>
+                <p>Deaths</p>
+            </button>
+        </div>
+    </div>
+    <div class="row section-chart">
+        <div class="col-md-12" id="chartArea"></div>
+    </div>
+    <div class="row section-timestamp">
+        <p class="timestamp-virus"></p>
     </div>
 {% endblock %}
 

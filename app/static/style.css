@@ -2,6 +2,50 @@
 
 body { /*font: 12px Arial;*/}
 
+.section-title{
+  margin: 15px 0px 15px 0px;
+}
+
+.section-title > p {
+  font: 25px Arial;
+  font-weight: bold;
+  text-align: center;
+}
+
+.live-indicator {
+  text-align: center;
+}
+
+.btn {
+  font: 20px Arial;
+  font-weight: bold;
+  border: None;
+  padding: 8px;
+  font-size: 16px;
+  pointer-events: none;
+  display: inline-block;
+  width: 150px;
+}
+
+.btn > p {
+  margin-top: 15px;
+}
+
+.btn-confirmed {
+  color: rgb(229, 62, 62);
+  background-color: rgb(254, 215, 215);
+}
+
+.btn-recovered {
+  color: rgb(56, 161, 105);
+  background-color: rgb(198, 246, 213);
+}
+
+.btn-deaths {
+  color: rgb(113, 128, 150);
+  background-color: rgb(226, 232, 240);
+}
+
 path {
   stroke: steelblue;
   stroke-width: 2;
@@ -23,6 +67,16 @@ path {
 #chartArea > svg {
   width: 100%;
   height: 100%;
+}
+
+.section-timestamp {
+  margin: 20px 10px;
+}
+
+.timestamp-virus {
+  font: 12px Arial;
+  font-style: italic;
+  text-align: center;
 }
 
 .overview_chart {
