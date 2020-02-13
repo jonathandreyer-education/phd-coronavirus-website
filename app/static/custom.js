@@ -131,7 +131,7 @@
             });
         }
 
-        setInterval(update_data, 5000);
+        setInterval(update_data, intervalRefresh * 1000);
     }, false);
 
     // chart

@@ -9,6 +9,9 @@ from datetime import timedelta
 import json
 import pygal
 
+PULL_FROM_DATA = 10
+REFRESH_BROWSER = 5
+
 tl = Timeloop()
 
 app = Flask(__name__)
@@ -17,14 +20,14 @@ Bootstrap(app)
 global dataStored
 
 
-@tl.job(interval=timedelta(seconds=10))
+@tl.job(interval=timedelta(seconds=PULL_FROM_DATA))
 def fetch_data():
     dataStored.pull_data()
 
 
 @app.route('/')
 def index():
-    return render_template('index.html', title='Coronavirus live feed')
+    return render_template('index.html', title='Coronavirus live feed', refresh_time=REFRESH_BROWSER)
 
 
 @app.route('/overview')
