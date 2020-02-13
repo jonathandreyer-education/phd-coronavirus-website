@@ -2,11 +2,15 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-<body class="body">
-	  <div class="container" align="left">
-			<embed type="image/svg+xml" src={{confirmed_BAR|safe}} style='max-width:800px'/>
-			<embed type="image/svg+xml" src={{deaths_BAR|safe}} style='max-width:800px'/>
-			<embed type="image/svg+xml" src={{recovered_BAR|safe}} style='max-width:800px'/>
-	  </div>
-</body>
+<div>
+	<div class="overview_chart">
+		<embed type="image/svg+xml" src={{confirmed_BAR|safe}} />
+	</div>
+	<div class="overview_chart">
+		<embed type="image/svg+xml" src={{deaths_BAR|safe}} />
+	</div>
+	<div class="overview_chart">
+		<embed type="image/svg+xml" src={{recovered_BAR|safe}} />
+	</div>
+</div>
 {% endblock %}
