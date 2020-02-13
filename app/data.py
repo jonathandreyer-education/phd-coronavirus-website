@@ -107,7 +107,8 @@ def get_data(use_local=False):
 
 
 class DataModel:
-    def __init__(self):
+    def __init__(self, use_local=False):
+        self._use_local = use_local
         self._data = None
         self._statical_data = {'SARS':{'deaths': 774, 'confirmed': 8_098, 'recovered': 7_324},
                                'MERS':{'deaths': 862, 'confirmed':2_506, 'recovered':1_644}}
@@ -115,7 +116,7 @@ class DataModel:
 
     def pull_data(self):
         try:
-            self._data = get_data(use_local=False)
+            self._data = get_data(use_local=self._use_local)
             print('Data fetched')
         except:
             print('Error to get data')

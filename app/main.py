@@ -11,6 +11,7 @@ import pygal
 
 PULL_FROM_DATA = 10
 REFRESH_BROWSER = 5
+USE_LOCAL = False
 
 tl = Timeloop()
 
@@ -72,7 +73,7 @@ def internal_error(error):
 
 
 if __name__ == '__main__':
-    dataStored = DataModel()
+    dataStored = DataModel(USE_LOCAL)
 
     tl.start()
 
