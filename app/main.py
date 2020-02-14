@@ -10,7 +10,7 @@ import json
 import pygal
 
 PULL_FROM_DATA = 10
-REFRESH_BROWSER = 5
+REFRESH_BROWSER = 10
 USE_LOCAL = False
 
 tl = Timeloop()
