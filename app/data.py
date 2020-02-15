@@ -71,7 +71,7 @@ def get_data_from_local():
 
 def get_data_from_http():
     # Download the dataset (Source: https://github.com/nat236919/Covid2019API/blob/master/app/helper.py)
-    BASE_URL = 'https://raw.githubusercontent.com/CSSEGISandData/2019-nCoV/master/time_series/time_series_2019-ncov-{}.csv'
+    BASE_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-{}.csv'
     DATAFRAMES = {'timestamp': None}
 
     # Iterate through all files
